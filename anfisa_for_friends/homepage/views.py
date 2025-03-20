@@ -8,11 +8,12 @@ from django.db.models import Q
 def index(request):
     template_name = 'homepage/index.html'
     ice_cream_list = IceCream.objects.values(
-        'id', 'title', 'description'
+        'id', 'title', 'price', 'description'
     ).filter(
         # Делаем запрос, объединяя два условия
         # через Q-объекты и оператор AND:
-        Q(is_published=True) & Q(is_on_main=True)
+        Q(is_published=True) & Q(is_on_main=True) &
+        Q(category__is_published=True)
         # order_by ограничиваем на главной странице не более 3 записей
     ).order_by('title')[1:4]
     context = {
